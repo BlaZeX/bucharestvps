@@ -5,7 +5,7 @@ enableRobotsTXT = true
 paginate = 60
 
 [outputs]
-home = ["HTML","RSS","JSON"]
+home = ["HTML","RSS"]
 
 [permalinks]
   hosts = "/hosts/:slug/"

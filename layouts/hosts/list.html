@@ -26,7 +26,7 @@ window.__HOSTS__ = [
       {{- end -}}
     {{- end -}}
   {{- end -}}
-  {{- if gt (len $vals) 0 -}}{{ printf "%.2f" (min $vals) }}{{ else }}null{{ end }}
+  {{- if gt (len $vals) 0 -}}{{ $sorted := sort $vals }}{{ printf "%.2f" (index $sorted 0) }}{{ else }}null{{ end }}
 }{{ if lt (add $i 1) (len $pages) }},{{ end }}
 {{- end -}}
 ];
