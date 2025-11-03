@@ -1,0 +1,75 @@
+
+- id: "megalith-basic-4g"
+  host: "megalith-cloud"
+  name: "Basic 4G"
+  vcpus: 2
+  ram_mb: 4096
+  disk_gb: 60
+  nvme: true
+  bandwidth_tb: 2
+  port_mbps: 1000
+  price_eur: 6.0
+  billing: "monthly"
+  ipv6: true
+  ddos: true
+  virt: "kvm"
+
+- id: "megalith-8g"
+  host: "megalith-cloud"
+  name: "Compute 8G"
+  vcpus: 4
+  ram_mb: 8192
+  disk_gb: 120
+  nvme: true
+  bandwidth_tb: 3
+  port_mbps: 1000
+  price_eur: 10.0
+  billing: "monthly"
+  ipv6: true
+  ddos: true
+  virt: "kvm"
+
+- id: "danube-2g"
+  host: "danube-hosting"
+  name: "Starter 2G"
+  vcpus: 1
+  ram_mb: 2048
+  disk_gb: 40
+  nvme: true
+  bandwidth_tb: 1
+  port_mbps: 1000
+  price_eur: 5.5
+  billing: "monthly"
+  ipv6: true
+  ddos: false
+  virt: "kvm"
+
+- id: "carpathia-4g"
+  host: "carpathia-vps"
+  name: "Core 4G"
+  vcpus: 2
+  ram_mb: 4096
+  disk_gb: 80
+  nvme: false
+  bandwidth_tb: 2
+  port_mbps: 1000
+  price_eur: 7.2
+  billing: "monthly"
+  ipv6: true
+  ddos: false
+  virt: "kvm"
+
+- id: "oldtown-1g"
+  host: "old-town-servers"
+  name: "Nano 1G"
+  vcpus: 1
+  ram_mb: 1024
+  disk_gb: 25
+  nvme: false
+  bandwidth_tb: 1
+  port_mbps: 100
+  price_eur: 4.9
+  billing: "monthly"
+  ipv6: true
+  ddos: true
+  virt: "kvm"

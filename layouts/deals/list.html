@@ -1,0 +1,24 @@
+
+{{ define "title" }}Bucharest VPS Deals{{ end }}
+{{ define "main" }}
+<h1 class="heading-underline">Deals & Coupons</h1>
+<div class="grid cols-3">
+  {{ $deals := (index site.Data "deals") }}
+  {{ range $deals }}
+  <div class="card" x-data="{copied:false}">
+    {{ $host := site.GetPage (printf "/hosts/%s" .host) }}
+    <strong>{{ with $host }}{{ .Title }}{{ else }}{{ .host }}{{ end }}</strong>
+    <p style="margin:6px 0">{{ .desc }}</p>
+    <div style="display:flex;gap:6px;align-items:center;margin:8px 0">
+      <code x-text="'{{ .code }}'"></code>
+      <button class="btn ghost" @click="navigator.clipboard.writeText('{{ .code }}'); copied=true; setTimeout(()=>copied=false,1500)">
+        Copy
+      </button>
+      <span x-show="copied" class="chip">Copied</span>
+    </div>
+    <p><a class="btn" href="{{ .url }}">Use deal</a></p>
+    {{ with .valid_till }}<p class="chip">Valid till {{ . }}</p>{{ end }}
+  </div>
+  {{ end }}
+</div>
+{{ end }}

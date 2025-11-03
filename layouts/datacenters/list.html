@@ -1,0 +1,16 @@
+
+{{ define "title" }}Bucharest Datacenters{{ end }}
+{{ define "main" }}
+<h1 class="heading-underline">Datacenters in Bucharest</h1>
+<div class="grid cols-3">
+  {{ range .Pages }}
+    <a class="card" href="{{ .RelPermalink }}">
+      <strong>{{ .Title }}</strong>
+      <p style="margin:6px 0">{{ .Params.operator }}</p>
+      {{ if .Params.ixps }}
+        <div class="chip">{{ delimit .Params.ixps ", " }}</div>
+      {{ end }}
+    </a>
+  {{ end }}
+</div>
+{{ end }}

@@ -1,0 +1,19 @@
+
+{{ define "main" }}
+<h1 class="heading-underline">{{ .Title }}</h1>
+<p><strong>Operator:</strong> {{ .Params.operator }}</p>
+{{ with .Params.address }}<p><strong>Address:</strong> {{ . }}</p>{{ end }}
+{{ with .Params.ixps }}<p><strong>IXPs:</strong> {{ delimit . ", " }}</p>{{ end }}
+{{ with .Params.notes }}<p>{{ . }}</p>{{ end }}
+
+<h3>Hosts using this datacenter</h3>
+<div class="grid cols-3">
+{{ $slug := .Slug }}
+{{ range where (where .Site.RegularPages "Section" "hosts") ".Params.datacenters" "intersect" (slice $slug) }}
+  <a class="card" href="{{ .RelPermalink }}">
+    <strong>{{ .Title }}</strong>
+    <p style="margin:6px 0">{{ .Params.summary }}</p>
+  </a>
+{{ end }}
+</div>
+{{ end }}

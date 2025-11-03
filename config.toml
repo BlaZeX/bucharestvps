@@ -1,0 +1,14 @@
+
+baseURL = "https://bucharestvps.com/"
+title = "BucharestVPS"
+enableRobotsTXT = true
+paginate = 60
+
+[outputs]
+home = ["HTML","RSS","JSON"]
+
+[permalinks]
+  hosts = "/hosts/:slug/"
+  datacenters = "/datacenters/:slug/"
+  articles = "/articles/:slug/"
+  deals = "/deals/"

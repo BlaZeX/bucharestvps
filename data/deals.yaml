@@ -1,0 +1,12 @@
+
+- host: "megalith-cloud"
+  code: "BUCH10"
+  desc: "10 percent off first month"
+  url: "/go/megalith"
+  valid_till: "2026-01-31"
+
+- host: "danube-hosting"
+  code: "DNB5"
+  desc: "€5 off yearly billing"
+  url: "/go/danube"
+  valid_till: "2026-03-31"

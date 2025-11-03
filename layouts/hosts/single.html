@@ -1,0 +1,50 @@
+
+{{ define "main" }}
+<h1 class="heading-underline">{{ .Title }}</h1>
+<p>{{ .Params.summary }}</p>
+<p>
+  <a class="btn" href="{{ .Params.affiliate }}">View plans</a>
+  <a class="btn ghost" rel="nofollow sponsored" href="{{ .Params.website }}">Website</a>
+</p>
+
+<h3>Plans</h3>
+<div class="card">
+  <div class="grid cols-3">
+  {{ $slug := .Slug }}
+  {{ $plans := (index site.Data "plans") }}
+  {{ range $plans }}
+    {{ range . }}
+      {{ if eq .host $slug }}
+      <div class="card">
+        <strong>{{ .name }}</strong>
+        <p style="margin:6px 0 8px">€{{ printf "%.2f" .price_eur }}/mo • {{ .vcpus }} vCPU • {{ div .ram_mb 1024 }} GB RAM • {{ .disk_gb }} GB {{ if .nvme }}NVMe{{ else }}SSD{{ end }}</p>
+        <div style="display:flex; gap:6px; flex-wrap:wrap">
+          {{ if .ipv6 }}<span class="chip">IPv6</span>{{ end }}
+          {{ if .ddos }}<span class="chip">DDoS</span>{{ end }}
+          <span class="chip">{{ .virt | upper }}</span>
+          <span class="chip">{{ .port_mbps }} Mbps</span>
+        </div>
+        <p style="margin-top:10px"><a class="btn" href="{{ $.Params.affiliate }}">Get this plan</a></p>
+      </div>
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  </div>
+</div>
+
+<h3>Datacenters used</h3>
+<div class="grid cols-3">
+  {{ range .Params.datacenters }}
+    {{ $dc := site.GetPage (printf "/datacenters/%s" .) }}
+    {{ with $dc }}
+      <a class="card" href="{{ .RelPermalink }}">
+        <strong>{{ .Title }}</strong>
+        <p style="margin:6px 0">{{ .Params.operator }}</p>
+        {{ if .Params.ixps }}
+          <div class="chip">{{ delimit .Params.ixps ", " }}</div>
+        {{ end }}
+      </a>
+    {{ end }}
+  {{ end }}
+</div>
+{{ end }}

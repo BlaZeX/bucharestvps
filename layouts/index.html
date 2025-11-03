@@ -1,0 +1,28 @@
+
+{{ define "title" }}Bucharest VPS · Compare, filter, decide{{ end }}
+{{ define "main" }}
+<section class="card">
+  <h1 class="heading-underline">Find a Bucharest VPS fast</h1>
+  <p>Compare plans, filter by features, and jump to the right host. Pure static site, speedy UI.</p>
+  <p>
+    <a class="btn" href="/hosts/">Browse Hosts</a>
+    <a class="btn ghost" href="/articles/why-host-in-bucharest/">Why Bucharest?</a>
+  </p>
+</section>
+
+<section style="margin-top:16px">
+  <h2 class="heading-underline">Top picks</h2>
+  <div class="grid cols-3">
+    {{ $pages := first 6 (where .Site.RegularPages "Section" "hosts") }}
+    {{ range $pages }}
+      <a class="card" href="{{ .RelPermalink }}">
+        <h3>{{ .Title }}</h3>
+        <p>{{ .Params.summary }}</p>
+        {{ with .Params.starting_price_eur }}
+        <span class="chip">from €{{ printf "%.2f" . }}/mo</span>
+        {{ end }}
+      </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

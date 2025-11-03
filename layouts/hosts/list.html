@@ -1,0 +1,87 @@
+
+{{ define "title" }}Bucharest VPS Hosts{{ end }}
+{{ define "main" }}
+<h1 class="heading-underline">Bucharest VPS Hosts</h1>
+
+<script>
+window.__HOSTS__ = [
+{{- $pages := where .Site.RegularPages "Section" "hosts" -}}
+{{- range $i, $h := $pages -}}
+{
+  slug: "{{ $h.Slug }}",
+  url: "{{ $h.RelPermalink }}",
+  title: {{ $h.Title | jsonify }},
+  summary: {{ $h.Params.summary | default "" | jsonify }},
+  features: {{ $h.Params.features | default (slice) | jsonify }},
+  starting_price_eur: {{ printf "%.2f" ($h.Params.starting_price_eur | default 0) }},
+  eur_per_gb_ram:
+  {{- $vals := slice -}}
+  {{- $plans := (index site.Data "plans") -}}
+  {{- range $plans -}}
+    {{- range . -}}
+      {{- if eq .host $h.Slug -}}
+        {{- $ramgb := (div .ram_mb 1024) -}}
+        {{- $val := (div .price_eur (cond (eq $ramgb 0) 1 $ramgb)) -}}
+        {{- $vals = $vals | append $val -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if gt (len $vals) 0 -}}{{ printf "%.2f" (min $vals) }}{{ else }}null{{ end }}
+}{{ if lt (add $i 1) (len $pages) }},{{ end }}
+{{- end -}}
+];
+</script>
+
+<div class="card" x-data="hostFilter()">
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+    <label class="chip"><input type="checkbox" x-model="filters.ipv6"> &nbsp;IPv6</label>
+    <label class="chip"><input type="checkbox" x-model="filters.nvme"> &nbsp;NVMe</label>
+    <label class="chip"><input type="checkbox" x-model="filters.ddos"> &nbsp;DDoS</label>
+    <select class="chip" x-model="sortBy">
+      <option value="price">Lowest price</option>
+      <option value="ramValue">Best €/GB RAM</option>
+      <option value="title">Name A–Z</option>
+    </select>
+  </div>
+
+  <div class="grid cols-3">
+    <template x-for="h in sorted(filtered(hosts))" :key="h.slug">
+      <a class="card" :href="h.url" style="display:block">
+        <h3 x-text="h.title"></h3>
+        <p style="min-height:48px" x-text="h.summary"></p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="chip" x-show="h.features.includes('ipv6')">IPv6</span>
+            <span class="chip" x-show="h.features.includes('nvme')">NVMe</span>
+            <span class="chip" x-show="h.features.includes('ddos')">DDoS</span>
+          </div>
+          <div><span class="chip">from €<span x-text="(+h.starting_price_eur).toFixed(2)"></span>/mo</span></div>
+        </div>
+      </a>
+    </template>
+  </div>
+</div>
+
+<script>
+function hostFilter(){
+  return {
+    filters: { ipv6:false, nvme:false, ddos:false },
+    sortBy: 'price',
+    hosts: window.__HOSTS__,
+    filtered(list){
+      return list.filter(h =>
+        (!this.filters.ipv6 || h.features.includes('ipv6')) &&
+        (!this.filters.nvme || h.features.includes('nvme')) &&
+        (!this.filters.ddos || h.features.includes('ddos'))
+      );
+    },
+    sorted(list){
+      const L = [...list];
+      if(this.sortBy==='ramValue') return L.sort((a,b)=> (a.eur_per_gb_ram??999) - (b.eur_per_gb_ram??999));
+      if(this.sortBy==='title') return L.sort((a,b)=> a.title.localeCompare(b.title));
+      return L.sort((a,b)=> (a.starting_price_eur??999) - (b.starting_price_eur??999));
+    }
+  }
+}
+</script>
+{{ end }}
